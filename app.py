@@ -7,7 +7,7 @@ app=Flask(__name__)
 with open("thyroid.pkl","rb")as f:
     model=pickle.load(f)
 
-def predict_thyroid(age=34,gender='F',smoking='No',hx_smoking='No',hx_radiothreapy='No',thyroid_function='Euthyroid',physical_examination='Single nodular goiter-righ',Adenopathy='No',Pathology='Micropapillary',Focality='Uni-Focal',risk='Low',T='T1a',N='N0',M='M0',Stage='1',Response='Indeterminate'):
+def predict_thyroid(age=34,gender='F',smoking='No',hx_smoking='No',hx_radiotherapy='No',thyroid_function='Euthyroid',physical_examination='Single nodular goiter-righ',Adenopathy='No',Pathology='Micropapillary',Focality='Uni-Focal',risk='Low',T='T1a',N='N0',M='M0',Stage='1',Response='Indeterminate'):
    temp=list()
    if gender=='F':
       temp=temp+[1,0]
@@ -24,7 +24,7 @@ def predict_thyroid(age=34,gender='F',smoking='No',hx_smoking='No',hx_radiothrea
    else:
       temp=temp+[0,1]
    
-   if hx_radiothreapy=='No':
+   if hx_radiotherapy=='No':
       temp=temp+[1,0]
    else:
       temp=temp+[0,1]
@@ -49,39 +49,34 @@ def predict_thyroid(age=34,gender='F',smoking='No',hx_smoking='No',hx_radiothrea
    else:
       temp=temp+[0,0,0,0,1]
    
-   if Pathology=='Clinical Hypothyroidism':
+   if Pathology=='Follicular':
       temp=temp+[1,0,0,0]
-   elif Pathology=='Euthyroid':
+   elif Pathology=='Hurthel cell':
       temp=temp+[0,1,0,0]
-   elif Pathology=='Subclinical Hyperthyroidism':
+   elif Pathology=='Micropapillary':
       temp=temp+[0,0,1,0]
    else:
       temp=temp+[0,0,0,1]
 
-   if hx_radiothreapy=='No':
-      temp=temp+[1,0]
-   else:
-      temp=temp+[0,1]
-   
    if risk=='High':
       temp=temp+[1,0,0]
-   elif risk=='ntermediate':
+   elif risk=='Intermediate':
       temp=temp+[0,1,0]
    else:
       temp=temp+[0,0,1]
    
-   if Stage=='I':
+   if Stage=='1':
       temp=temp+[1,0,0,0]
-   elif Stage=='II':
+   elif Stage=='2':
       temp=temp+[0,1,0,0]
-   elif Stage=='III':
+   elif Stage=='3':
       temp=temp+[0,0,1,0]
-   elif Stage=='IVA':
-      temp=temp+[0,0,1,0]
+   elif Stage=='4a':
+      temp=temp+[0,0,0,1]
    else:
       temp=temp+[0,0,0,1]
    
-   if Response=='iochemical Incomplete':
+   if Response=='Biochemical Incomplete':
       temp=temp+[1,0,0,0]
    elif Response=='Excellent':
       temp=temp+[0,1,0,0]
@@ -166,7 +161,7 @@ def predict():
         gender = request.form.get('gender')
         smoking = request.form.get('smoking')
         hx_smoking = request.form.get('hx_smoking')
-        hx_radiothreapy = request.form.get('hx_radiothreapy')
+        hx_radiotherapy = request.form.get('hx_radiothreapy')
         thyroid_function = request.form.get('thyroid_function')
         physical_examination = request.form.get('physical_examination')
         Adenopathy = request.form.get('Adenopathy')
@@ -179,7 +174,7 @@ def predict():
         Stage = request.form.get('Stage')
         Response = request.form.get('Response')
         
-        pred=predict_thyroid(age=age,gender=gender,smoking=smoking,hx_smoking=hx_smoking,hx_radiothreapy=hx_radiothreapy,thyroid_function=thyroid_function,physical_examination=physical_examination,Adenopathy=Adenopathy,Pathology=Pathology,Focality=Focality,risk=risk,T=T,N=N,M=M,Stage=Stage,Response=Response)
+        pred=predict_thyroid(age=age,gender=gender,smoking=smoking,hx_smoking=hx_smoking,hx_radiotherapy=hx_radiotherapy,thyroid_function=thyroid_function,physical_examination=physical_examination,Adenopathy=Adenopathy,Pathology=Pathology,Focality=Focality,risk=risk,T=T,N=N,M=M,Stage=Stage,Response=Response)
         print(pred)
         return render_template('result.html',
                                Prediction=pred)
